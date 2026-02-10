@@ -10,6 +10,8 @@ import time
 import cv2
 from pprint import pprint
 
+from angles import elbow_angle
+
 model_path = './pose_landmarker.task'
 
 #Declare model variables and make name shorter for better display later
@@ -54,8 +56,6 @@ keep_connections = [
 
 #Create a pose landmarker with instance from live stream mode
 def print_result(result: PoseLandmarkerResult, output_image: mp.Image, timestamp_ms: int):
-    
-    
     #Draw a coordinates on image
     img = output_image.numpy_view().copy()
     h, w, _ = img.shape
@@ -63,9 +63,16 @@ def print_result(result: PoseLandmarkerResult, output_image: mp.Image, timestamp
     if result.pose_landmarks:
         #store deteced landmark pose in variable pose
         pose = result.pose_landmarks[0]
+
+        #calculate angles
+        right_elbow = elbow_angle(pose, "right")
+        #left_elbow = elbow_angle(pose, "left")
+
+        print(f"Right Elbow Angle: {right_elbow:.2f} degrees")
+        #print(f"Left Elbow Angle: {left_elbow:.2f} degrees")
         
-        #for idx, landmark in enumerate(pose):
-            #name = PoseLandmark(idx).name
+        """"
+        #print coordinates of the detected landmarks
         for idx in keep_indices:
             landmark = pose[idx]
             name = PoseLandmark(idx).name
@@ -75,7 +82,8 @@ def print_result(result: PoseLandmarkerResult, output_image: mp.Image, timestamp
                 f"y={landmark.y:.3f}, "
                 f"z={landmark.z:.3f}"
             )
-
+        """
+            
         #draw landmarks on image
         #for landmark in pose:
         for idx in keep_indices:
