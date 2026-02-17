@@ -30,3 +30,23 @@ def elbow_angle(pose, side="right"):
         elbow = pose[PoseLandmark.LEFT_ELBOW]
         wrist = pose[PoseLandmark.LEFT_WRIST]
     return calculate_angle(shoulder, elbow, wrist)
+
+def elbow_to_body_distance(pose, side="right"):
+    if side.lower() == "right":
+        shoulder = pose[PoseLandmark.RIGHT_SHOULDER]
+        hip = pose[PoseLandmark.RIGHT_HIP]
+        elbow = pose[PoseLandmark.RIGHT_ELBOW]
+    else:
+        shoulder = pose[PoseLandmark.LEFT_SHOULDER]
+        hip = pose[PoseLandmark.LEFT_HIP]
+        elbow = pose[PoseLandmark.LEFT_ELBOW]
+    
+    #midpoint between shoulder and hip
+    torso_midpoint_x = (shoulder.x + hip.x) / 2
+    torso_midpoint_y = (shoulder.y + hip.y) / 2
+
+    #distance from elbow to torso midpoint
+    distance = math.sqrt((elbow.x - torso_midpoint_x) ** 2 + 
+                         (elbow.y - torso_midpoint_y) ** 2)
+    
+    return distance

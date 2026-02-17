@@ -10,7 +10,7 @@ import time
 import cv2
 from pprint import pprint
 
-from angles import elbow_angle
+from angles import elbow_angle, elbow_to_body_distance
 
 model_path = './pose_landmarker.task'
 
@@ -65,11 +65,14 @@ def print_result(result: PoseLandmarkerResult, output_image: mp.Image, timestamp
         pose = result.pose_landmarks[0]
 
         #calculate angles
-        right_elbow = elbow_angle(pose, "right")
+        #right_elbow = elbow_angle(pose, "right")
         #left_elbow = elbow_angle(pose, "left")
-
-        print(f"Right Elbow Angle: {right_elbow:.2f} degrees")
+        #print(f"Right Elbow Angle: {right_elbow:.2f} degrees")
         #print(f"Left Elbow Angle: {left_elbow:.2f} degrees")
+
+        right_elbow_distance = elbow_to_body_distance(pose, "right")
+        print(f"Right Elbow to Body Distance: {right_elbow_distance:.2f}")
+
         
         """"
         #print coordinates of the detected landmarks
