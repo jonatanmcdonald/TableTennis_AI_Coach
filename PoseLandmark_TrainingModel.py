@@ -11,23 +11,18 @@ from mediapipe.tasks.python.vision import (
 from mediapipe.tasks.python import BaseOptions
 
 
-video_path = "./Videos/Senura_Side.mp4"
+video_path = "./Videos/Test/NICHOLINAS.MOV"
 output_video_path = "dataset/good/output_video.mp4"
 
 # keep only landmarks we care about
 keep_indices = [
     PoseLandmark.LEFT_SHOULDER,
     PoseLandmark.RIGHT_SHOULDER,
-    PoseLandmark.LEFT_ELBOW,
     PoseLandmark.RIGHT_ELBOW,
-    PoseLandmark.LEFT_WRIST,
     PoseLandmark.RIGHT_WRIST,
     PoseLandmark.LEFT_HIP,
     PoseLandmark.RIGHT_HIP,
-    PoseLandmark.LEFT_KNEE,
-    PoseLandmark.RIGHT_KNEE,
-    PoseLandmark.LEFT_ANKLE,
-    PoseLandmark.RIGHT_ANKLE
+    
 ]
 
 model_path = './pose_landmarker.task'

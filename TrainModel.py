@@ -6,7 +6,7 @@ import os
 class Forehand_Front_Dataset(Dataset):
     def __init__(self, root_dir):
         """
-        root_dor: root folder containing subfolders
+        root_dir: root folder containing subfolders
         """
         self.samples = []
         self.labels = []
@@ -30,7 +30,7 @@ class Forehand_Front_Dataset(Dataset):
     
     def __getitem__(self, idx):
         #Load .npy file
-        data = np.load(self.samples[idx]).astype(np.float32) #shape: (30, 12)
+        data = np.load(self.samples[idx]).astype(np.float32) #shape: (30, 18)
         label = self.labels[idx]
         #Convert to Pytorch tensors
         return torch.tensor(data), torch.tensor(label, dtype=torch.long)

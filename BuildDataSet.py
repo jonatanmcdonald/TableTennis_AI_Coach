@@ -35,6 +35,7 @@ keep_indices = [
 
 # PoseLandmarker setup
 model_path = './pose_landmarker.task'
+
 options = PoseLandmarkerOptions(
     base_options=BaseOptions(model_asset_path=model_path),
     running_mode=RunningMode.VIDEO,
@@ -46,7 +47,7 @@ def normalize_frame(keypoints):
     Center on hip midpoint
     -Scale by torso length (distance between shoulders and hips)
     """
-    keypoints = np.array(keypoints).reshape(-1, 2) #(6.2)
+    keypoints = np.array(keypoints).reshape(-1, 3) #3=x,y,z
 
     #Hip midpoint
     left_hip = keypoints[keep_indices.index(PoseLandmark.LEFT_HIP)]
@@ -65,7 +66,7 @@ def normalize_frame(keypoints):
 
     #Center and scale
     keypoints_norm = (keypoints - hip_mid) / torso_length
-    return keypoints_norm.flatten().tolist() #12 features
+    return keypoints_norm.flatten().tolist() #18 features
 
     
 
@@ -86,12 +87,14 @@ with PoseLandmarker.create_from_options(options) as landmarker:
             with PoseLandmarker.create_from_options(options) as landmarker:
                 cap = cv2.VideoCapture(video_path)
                 stroke_data = []
-                frame_idx = 0
+            
                 fps = cap.get(cv2.CAP_PROP_FPS) or 30
                 if not fps or fps != fps:
                     fps = 30
 
-                prev_timestamp = -1
+            
+                frame_interval = int(1000 / fps)
+                prev_timestamp = 0
 
                 while True:
                     ret, frame = cap.read()
@@ -100,22 +103,22 @@ with PoseLandmarker.create_from_options(options) as landmarker:
 
                     height, width = frame.shape[:2]    
                     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    rgb_frame = np.ascontiguousarray(rgb_frame, dtype=np.uint8) #Ensure type
                     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
 
-                    timestamp_ms = int(frame_idx * (1000 / fps))
-                    timestamp_ms = max(timestamp_ms, prev_timestamp + 1)
-                    prev_timestamp = timestamp_ms
+                    timestamp_ms = int(prev_timestamp)
+                    prev_timestamp += frame_interval
 
                     result = landmarker.detect_for_video(mp_image, timestamp_ms)
 
-                    annotated_frame = frame.copy()
+                    #annotated_frame = frame.copy()
 
                     if result.pose_landmarks:
                         pose = result.pose_landmarks[0]
                         frame_keypoints = []
                         for idx in keep_indices:
                             landmark = pose[idx]
-                            frame_keypoints.extend([landmark.x, landmark.y])
+                            frame_keypoints.extend([landmark.x, landmark.y, landmark.z])
                             #x = int(landmark.x * frame.shape[1])
                             #y = int(landmark.y * frame.shape[0])
                             #cv2.circle(annotated_frame, (x, y), 5, (0, 255, 0), -1)
@@ -130,7 +133,7 @@ with PoseLandmarker.create_from_options(options) as landmarker:
                     #if key == 27:  # ESC to exit
                     #    break
 
-                    frame_idx += 1
+                    #frame_idx += 1
 
                 cap.release()
 
