@@ -108,7 +108,7 @@ def start_feedback(feedback_ui_callback=None):
     SWING_COOLDOWN_FRAMES = 20  # minimum frames between swings
     MIN_SWING_FRAMES = 8        # minimum frames to consider a swing
     START_THRESHOLD = 0.10
-    END_THRESHOLD = 0.08
+    END_THRESHOLD = 0.05
     PEAK_THRESHOLD = 0.15     # wrist speed must reach this to count as a full swing
 
     v_peak = 0  # max wrist speed during current swing
@@ -155,7 +155,7 @@ def start_feedback(feedback_ui_callback=None):
 
                 # smoothing
                 if buffer:
-                    alpha = 0.6
+                    alpha = 0.5
                     prev = np.array(buffer[-1])
                     curr = np.array(frame_keypoints)
                     frame_keypoints = (alpha * prev + (1 - alpha) * curr).tolist()
