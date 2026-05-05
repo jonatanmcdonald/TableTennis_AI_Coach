@@ -59,7 +59,7 @@ criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 # Training loop
-num_epochs = 40
+num_epochs = 40 #YOU CAN SELECT DIFFERENT NUMBER OF EPOCHS
 
 for epoch in range(num_epochs):
     model.train()

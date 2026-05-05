@@ -1,0 +1,22 @@
+# Table Tennis AI Coach
+Table Tennis AI Coach is a real-time feedback system designed to help players improve their technique using computer vision and machine learning. By analyzing player movements and strokes, the system provides instant insights and guidance to enhance performance, making high-level coaching more accessible.
+
+2D is for model trained on x and y coordinates, whilst 3D is trained on x,y and z coordinate. Both have same files but adapted for respective coordinate system. Their files work the same except for coordinates. 2D has been more focused on and is more reliable.
+
+BuildDataSet extracts the coordinates from video of a stroke. Be sure to manually switch the folder to get all categories.
+
+FindOutliers2D, shows you the what files are heavy outliers, which can be used to refine data remove videos that deviate too much.
+
+RealTimeFeedback is the application, you can play around with what model you want to use. Models are found in lstm/lstm2D.
+
+TrainLSTM2D is the training script. Here it's possible to change number of Epochs you want to use to train the model.
+TrainModel2D lables the data correctly.
+
+ui2D is the application but started up from with a UI.
+
+VisualizeData2D, shows you the data graphed on a chart. It will show the the different coordinates throughout the 30 frames of a swing.
+
+
+
+
+

@@ -73,7 +73,7 @@ def get_wrist_speed(prev, curr):
 # LOAD MODEL
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = LSTMClassifier().to(device)
-model.load_state_dict(torch.load('./2D/lstm2D/lstm_forehand_front_2d_70.pth', map_location=device))
+model.load_state_dict(torch.load('./2D/lstm2D/lstm_forehand_front_2d_70.pth', map_location=device)) #YOU CAN CHOOSE BETWEEN DIFFERENT MODELS, THEY ARE IN THE LSTM2D FOLDER
 model.eval()
 
 
